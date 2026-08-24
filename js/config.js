@@ -26,7 +26,7 @@ const APP_CONFIG = {
 
   // URL del Google Apps Script publicado como Web App (ver README, paso 6-8).
   // Ejemplo: "https://script.google.com/macros/s/AKfycb.../exec"
-  googleAppsScriptUrl: "PEGA_AQUI_LA_URL_DE_TU_WEB_APP",
+  googleAppsScriptUrl: "https://script.google.com/macros/s/AKfycbxWt7I5p9Nuv_Z5Snevgv8zkn9pVP2fNRRGyXriIkqHo6n6EdTjX0Z4g5N53Du2vJw/exec",
 
   // Comportamiento
   enableLocalStorage: true,
