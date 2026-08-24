@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>System Check · Evaluación Inicial</title>
+<meta name="description" content="Evaluación diagnóstica inicial para estudiantes.">
+
+<!-- Tipografías -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Fondo técnico decorativo -->
+<div class="scan-grid" aria-hidden="true"></div>
+<div class="scan-line" aria-hidden="true"></div>
+
+<div id="app" class="app">
+
+  <!-- ============ HEADER GLOBAL (barra de progreso) ============ -->
+  <header class="topbar" id="topbar" hidden>
+    <div class="topbar__inner">
+      <div class="topbar__brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-id" id="brandEvalId">EVAL-000</span>
+      </div>
+      <div class="topbar__progress" role="progressbar" aria-label="Progreso de la evaluación" aria-valuemin="0" aria-valuemax="100" id="progressBar" aria-valuenow="0">
+        <div class="topbar__progress-track">
+          <div class="topbar__progress-fill" id="progressFill"></div>
+        </div>
+        <span class="topbar__progress-value" id="progressValue">0%</span>
+      </div>
+      <button type="button" class="btn-restart" id="restartBtn" aria-label="Reiniciar evaluación">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 4v6h6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="stage" id="stage" aria-live="polite">
+
+    <!-- ============ PANTALLA: PORTADA ============ -->
+    <section class="screen screen--intro" id="screen-intro" data-screen>
+      <div class="intro__scan" aria-hidden="true">
+        <div class="intro__ring"></div>
+        <div class="intro__ring intro__ring--2"></div>
+        <span class="intro__core"></span>
+      </div>
+      <p class="eyebrow" id="introEyebrow">SYSTEM CHECK</p>
+      <h1 class="intro__title" id="introTitle">¿Qué nivel tienes realmente?</h1>
+      <p class="intro__subtitle" id="introSubtitle">Vamos a descubrirlo.</p>
+
+      <dl class="intro__meta">
+        <div class="intro__meta-item">
+          <dt>Asignatura</dt>
+          <dd id="introSubject">—</dd>
+        </div>
+        <div class="intro__meta-item">
+          <dt>Curso</dt>
+          <dd id="introCourse">—</dd>
+        </div>
+        <div class="intro__meta-item">
+          <dt>Duración estimada</dt>
+          <dd id="introDuration">5–8 min</dd>
+        </div>
+      </dl>
+
+      <p class="intro__description" id="introDescription"></p>
+
+      <button type="button" class="btn btn--primary btn--lg" id="startBtn">
+        <span>Comenzar escaneo</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+
+      <p class="intro__resume" id="resumeNotice" hidden>
+        Tienes un escaneo sin terminar.
+        <button type="button" class="link-btn" id="resumeBtn">Continuar donde lo dejé</button>
+      </p>
+
+      <p class="intro__privacy">
+        Tus datos se usan únicamente para esta evaluación diagnóstica y el análisis educativo de la asignatura.
+      </p>
+    </section>
+
+    <!-- ============ PANTALLA: DATOS DEL ESTUDIANTE ============ -->
+    <section class="screen screen--student" id="screen-student" data-screen hidden>
+      <p class="eyebrow">IDENTIFICACIÓN</p>
+      <h2 class="screen__title">Antes de empezar, ¿quién eres?</h2>
+      <p class="screen__subtitle">Solo lo justo para identificar tu evaluación.</p>
+
+      <form class="student-form" id="studentForm" novalidate>
+        <div class="field">
+          <label for="studentName">Nombre <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="studentName" name="studentName" autocomplete="given-name" required maxlength="80">
+          <span class="field__error" id="err-studentName" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="studentSurname">Apellidos <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="studentSurname" name="studentSurname" autocomplete="family-name" required maxlength="100">
+          <span class="field__error" id="err-studentSurname" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="studentGroup">Grupo <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="studentGroup" name="studentGroup" placeholder="p. ej. 1º DAM A" required maxlength="40">
+          <span class="field__error" id="err-studentGroup" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="studentCenter">Centro de estudio <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="studentCenter" name="studentCenter" required maxlength="120">
+          <span class="field__error" id="err-studentCenter" aria-live="polite"></span>
+        </div>
+
+        <div class="screen__nav">
+          <button type="button" class="btn btn--ghost" data-nav="back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Atrás
+          </button>
+          <button type="submit" class="btn btn--primary">
+            Siguiente
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ PANTALLA: SECCIÓN (transición de bloque) ============ -->
+    <section class="screen screen--section" id="screen-section" data-screen hidden>
+      <div class="section-card">
+        <span class="section-card__icon" id="sectionIcon" aria-hidden="true">◆</span>
+        <p class="eyebrow" id="sectionEyebrow">BLOQUE</p>
+        <h2 class="section-card__title" id="sectionTitle">—</h2>
+        <p class="section-card__desc" id="sectionDesc"></p>
+        <button type="button" class="btn btn--primary" id="sectionContinueBtn">Entrar</button>
+      </div>
+    </section>
+
+    <!-- ============ PANTALLA: PREGUNTA ============ -->
+    <section class="screen screen--question" id="screen-question" data-screen hidden>
+      <div class="q-header">
+        <span class="q-header__section" id="qSectionLabel">—</span>
+        <span class="q-header__count" id="qCount">1 / 1</span>
+      </div>
+
+      <div class="q-card" id="qCard">
+        <h2 class="q-card__question" id="qQuestionText">—</h2>
+        <p class="q-card__hint" id="qQuestionHint" hidden></p>
+        <div class="q-card__body" id="qBody"><!-- input dinámico --></div>
+        <p class="q-card__error" id="qError" aria-live="polite" hidden></p>
+      </div>
+
+      <div class="screen__nav">
+        <button type="button" class="btn btn--ghost" id="qBackBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Anterior
+        </button>
+        <button type="button" class="btn btn--primary" id="qNextBtn">
+          Siguiente
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ============ PANTALLA: RESUMEN ============ -->
+    <section class="screen screen--summary" id="screen-summary" data-screen hidden>
+      <p class="eyebrow">CASI HEMOS TERMINADO</p>
+      <h2 class="screen__title">Revisa tu escaneo</h2>
+      <p class="screen__subtitle">Comprueba que todos los bloques estén completos antes de enviar.</p>
+
+      <ul class="summary-list" id="summaryList"><!-- generado dinámicamente --></ul>
+
+      <p class="summary__error" id="summaryError" aria-live="polite" hidden></p>
+
+      <div class="screen__nav">
+        <button type="button" class="btn btn--ghost" data-nav="review">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Revisar
+        </button>
+        <button type="button" class="btn btn--primary btn--lg" id="submitBtn">
+          <span id="submitBtnLabel">Enviar</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ============ PANTALLA: ÉXITO ============ -->
+    <section class="screen screen--success" id="screen-success" data-screen hidden>
+      <div class="success__mark" aria-hidden="true">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <p class="eyebrow">SCAN COMPLETADO</p>
+      <h2 class="screen__title">Tu perfil ha sido registrado</h2>
+      <p class="screen__subtitle" id="successMessage">Gracias por completar la evaluación inicial. Nos vemos en clase.</p>
+    </section>
+
+    <!-- ============ PANTALLA: ERROR DE ENVÍO ============ -->
+    <section class="screen screen--fail" id="screen-fail" data-screen hidden>
+      <div class="fail__mark" aria-hidden="true">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      </div>
+      <p class="eyebrow">ERROR DE CONEXIÓN</p>
+      <h2 class="screen__title">No hemos podido enviar tus respuestas</h2>
+      <p class="screen__subtitle" id="failMessage">Comprueba tu conexión a internet e inténtalo de nuevo. Tu progreso está guardado.</p>
+      <button type="button" class="btn btn--primary" id="retryBtn">Reintentar envío</button>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
